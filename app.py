@@ -1,9 +1,14 @@
 import os
+import logging
 from flask import Flask, request, jsonify, render_template
 from retail_pulse_pipeline import load_model, build_input_row, predict_category
 
 MODEL_PATH = "retail_pulse_model.joblib"
 app = Flask(__name__, template_folder="templates", static_folder="static")
+
+# configure logging for production
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger("retail_pulse")
 
 
 def get_model():
@@ -53,6 +58,18 @@ def predict_api():
     )
     prediction = predict_category(MODEL, payload)
     return jsonify({"product_category": prediction})
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    """Health check endpoint used by load balancers and orchestration."""
+    try:
+        # simple model existence check
+        _ = MODEL is not None
+        return jsonify({"status": "ok"}), 200
+    except Exception as e:
+        logger.exception("Health check failed")
+        return jsonify({"status": "error", "detail": str(e)}), 500
 
 
 if __name__ == "__main__":

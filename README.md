@@ -67,3 +67,16 @@ Response:
 - The model predicts `Product Category` from transaction features.
 - The app separates training, serialization, and serving logic for maintainability.
 - The UI supports browser form input and a JSON prediction endpoint.
+
+## Docker
+
+Build and run the container locally:
+
+```bash
+docker build -t retail-pulse:latest .
+docker run -p 5000:5000 retail-pulse:latest
+```
+
+## Continuous Integration
+
+A basic GitHub Actions workflow is included at `.github/workflows/ci.yml` which runs `pytest` on push and pull requests to `main`.

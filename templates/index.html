@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retail Pulse</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Retail Intelligence</p>
+          <h1>Retail Pulse</h1>
+          <p class="hero-copy">Predict the most likely product category from retail transaction details using a production-ready model.</p>
+        </div>
+        <div class="hero-badge">Deployment ready</div>
+      </header>
+
+      <main class="dashboard">
+        <section class="card card--primary">
+          <div class="card__header">
+            <h2>Transaction prediction</h2>
+            <p>Enter customer and purchase data to get a predicted product category.</p>
+          </div>
+
+          <form class="form-grid" method="post" action="/" novalidate>
+            <label>
+              <span>Gender</span>
+              <select name="gender" required>
+                <option value="Male" {% if values.gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if values.gender == 'Female' %}selected{% endif %}>Female</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Age</span>
+              <input type="number" name="age" min="1" max="120" value="{{ values.age }}" required />
+            </label>
+
+            <label>
+              <span>Quantity</span>
+              <input type="number" name="quantity" min="1" max="100" value="{{ values.quantity }}" required />
+            </label>
+
+            <label>
+              <span>Price per unit</span>
+              <input type="number" step="0.01" name="price_per_unit" min="1" max="10000" value="{{ values.price_per_unit }}" required />
+            </label>
+
+            <label>
+              <span>Date</span>
+              <input type="date" name="date" value="{{ values.date }}" required />
+            </label>
+
+            <div class="button-row">
+              <button type="submit">Predict category</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="card card--secondary">
+          <div class="card__header">
+            <h2>Prediction outcome</h2>
+            <p>Your model result will appear here after submitting the form.</p>
+          </div>
+
+          {% if prediction %}
+            <div class="result-card">
+              <p class="result-label">Predicted Category</p>
+              <p class="result-value">{{ prediction }}</p>
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <p>Ready for prediction. Enter the transaction details and click the button.</p>
+            </div>
+          {% endif %}
+
+          <div class="stats-grid">
+            <div class="stat">
+              <span>Target</span>
+              <strong>Product Category</strong>
+            </div>
+            <div class="stat">
+              <span>Data size</span>
+              <strong>1000 rows</strong>
+            </div>
+            <div class="stat">
+              <span>Model type</span>
+              <strong>Random Forest</strong>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="footer">
+        <p>Production-friendly Flask app with a well-separated training pipeline, API endpoint, and deployment-ready configuration.</p>
+      </footer>
+    </div>
+  </body>
+</html>
